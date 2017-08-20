@@ -1,5 +1,16 @@
 <md-radio-group class="radio-group">
-  <md-radio-button class="radio-button" value="1" checked="true">Release</md-radio-button>
-  <md-radio-button class="radio-button" value="2">Artist</md-radio-button>
-  <md-radio-button class="radio-button" value="3">Label</md-radio-button>
+  <div *ngFor="let searchOption of searchOptions; let first = first;">
+    <md-radio-button
+      value="searchOption" class="radio-button">{{searchOption}}
+    </md-radio-button>
+  </div>
+
 </md-radio-group>
+<md-input-container>
+  <input mdInput type="text" [formControl]="queryCrtl" [mdAutocomplete]="auto">
+  <md-autocomplete #auto="mdAutocomplete">
+    <md-option *ngFor="let query of states" [value]="query">
+      {{query}}
+    </md-option>
+  </md-autocomplete>
+</md-input-container>
