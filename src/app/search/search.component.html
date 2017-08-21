@@ -4,13 +4,14 @@
       value={{searchOption}} class="radio-button">{{searchOption}}
     </md-radio-button>
   </div>
-
 </md-radio-group>
+
 <md-input-container>
-  <input mdInput type="text" [formControl]="queryCrtl" [mdAutocomplete]="auto">
-  <md-autocomplete #auto="mdAutocomplete">
-    <md-option *ngFor="let query of states" [value]="query">
-      {{query}}
-    </md-option>
-  </md-autocomplete>
+  <input mdInput [formControl]="queryCrtl" [mdAutocomplete]="auto">
 </md-input-container>
+<md-autocomplete #auto="mdAutocomplete">
+  <md-option *ngFor="let query of filteredQueries | async" [value]="query">
+    {{query}}
+  </md-option>
+</md-autocomplete>
+
