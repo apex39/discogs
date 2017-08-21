@@ -77,7 +77,7 @@ export class SearchComponent implements OnInit {
   }
 
   filterQueries(value: string) {
-    return value ? this.states.filter(query => query.toLowerCase().indexOf(value.toLowerCase()) === 0)
+    return value ? this.states.filter(query => query.toLowerCase().indexOf(value.toLowerCase()) >= 0)
       : this.states;
   }
 }
