@@ -1,7 +1,7 @@
 <md-radio-group class="radio-group">
   <div *ngFor="let searchOption of searchOptions; let first = first;">
     <md-radio-button
-      value="searchOption" class="radio-button">{{searchOption}}
+      value={{searchOption}} class="radio-button">{{searchOption}}
     </md-radio-button>
   </div>
 
