@@ -1,54 +1,20 @@
 import { Component, OnInit } from '@angular/core';
 import {FormControl} from '@angular/forms';
 import {Observable} from 'rxjs/Observable';
+
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/startWith';
-import {SearchService} from './search.service';
-
-declare module namespace {
-
-  export interface Urls {
-    last: string;
-    next: string;
-  }
-
-  export interface Pagination {
-    per_page: number;
-    pages: number;
-    page: number;
-    urls: Urls;
-    items: number;
-  }
-
-  export interface Community {
-    want: number;
-    have: number;
-  }
-
-  export interface Result {
-    style: string[];
-    thumb: string;
-    title: string;
-    country: string;
-    format: string[];
-    uri: string;
-    community: Community;
-    label: string[];
-    catno: string;
-    year: string;
-    genre: string[];
-    resource_url: string;
-    type: string;
-    id: number;
-    barcode: string[];
-  }
-
-  export interface RootObject {
-    pagination: Pagination;
-    results: Result[];
-  }
-
-}
+import {Subject} from 'rxjs/Subject';
+import 'rxjs/add/operator/debounceTime';
+import 'rxjs/add/operator/distinctUntilChanged';
+import 'rxjs/add/operator/switchMap';
+import 'rxjs/add/observable/of';
+import 'rxjs/add/operator/catch';
+import 'rxjs/add/operator/map';
+import {Http} from '@angular/http';
+import {SearchService} from '../search.service';
+import {Result} from './model/members/result';
+import {SearchResult} from './model/search-result';
 
 @Component({
   selector: 'app-search',
@@ -56,10 +22,11 @@ declare module namespace {
   styleUrls: ['./search.component.css'],
   providers: [SearchService]
 })
-export class SearchComponent implements OnInit {
+
+export class SearchComponent {
   queryCrtl: FormControl;
   filteredQueries: Observable<string[]>;
-  results: Observable<string[]>;
+  searchResults: SearchResult;
   states = ['Alabama',
     'Alaska',
     'Arizona',
@@ -116,18 +83,26 @@ export class SearchComponent implements OnInit {
     'Label'
   ];
 
-  constructor(private searchService: SearchService) {
-    this.queryCrtl = new FormControl();
-    this.filteredQueries = this.queryCrtl.valueChanges.startWith(null).map(value => this.filterQueries(value));
+  private searchTerms = new Subject<string>();
 
+  constructor(private http: Http, private searchService: SearchService) {
+    this.queryCrtl = new FormControl();
+    this.filteredQueries = this.queryCrtl.valueChanges
+      .startWith(null).map(value => this.filterQueries(value));
   }
 
-  ngOnInit() {
-    this.results = this.searchService.getReleasesSearchResults('abd');
+  search(term: string): void {
+    this.searchTerms.next(term);
   }
 
   filterQueries(value: string) {
     return value ? this.states.filter(query => query.toLowerCase().indexOf(value.toLowerCase()) >= 0)
       : this.states;
+  }
+
+  getReleasesSearchResults(query: string) {
+    this.searchService.search(query).subscribe(response => {
+      this.searchResults = response;
+    });
   }
 }

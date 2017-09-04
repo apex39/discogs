@@ -7,7 +7,7 @@
 </md-radio-group>
 
 <md-input-container>
-  <input mdInput [formControl]="queryCrtl" [mdAutocomplete]="auto">
+  <input mdInput [formControl]="queryCrtl" [mdAutocomplete]="auto" (keyup)="getReleasesSearchResults(queryCrtl.value)">
 </md-input-container>
 <md-autocomplete #auto="mdAutocomplete">
   <md-option *ngFor="let query of filteredQueries | async" [value]="query">
@@ -15,6 +15,8 @@
   </md-option>
 </md-autocomplete>
 
-<div *ngFor="let result of results | async">
-{{result}}
+<ng-container *ngIf="searchResults">
+<div *ngFor="let result of searchResults.results; let i = index">
+  {{result.title}}
 </div>
+</ng-container>
