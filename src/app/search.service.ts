@@ -11,8 +11,25 @@ export class SearchService {
 
   constructor(private http: Http) { }
 
-  search(query: string): Observable<SearchResult> {
-    const url = `${this.searchUrl}?release_title=${query}&key=${this.customerKey}&secret=${this.customerSecret}`;
+  search(query: string, checkedSearchOption: string): Observable<SearchResult> {
+    let urlParameter;
+
+    switch (checkedSearchOption) {
+      case 'Release': {
+        urlParameter = 'release_title';
+        break;
+      }
+      case 'Artist': {
+        urlParameter = 'artist';
+        break;
+      }
+      case 'Label': {
+        urlParameter = 'label';
+        break;
+      }
+    }
+    const url = `${this.searchUrl}?${urlParameter}=${query}&key=${this.customerKey}&secret=${this.customerSecret}`;
+    console.log(url);
     return this.http.get(url).map(response => response.json()); // Http will be deprecated
   }
 

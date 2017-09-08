@@ -13,7 +13,6 @@ import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 import {Http} from '@angular/http';
 import {SearchService} from '../search.service';
-import {Result} from './model/members/result';
 import {SearchResult} from './model/search-result';
 
 @Component({
@@ -23,7 +22,8 @@ import {SearchResult} from './model/search-result';
   providers: [SearchService]
 })
 
-export class SearchComponent {
+export class SearchComponent implements OnInit {
+
   queryCrtl: FormControl;
   filteredQueries: Observable<string[]>;
   searchResults: SearchResult;
@@ -31,31 +31,6 @@ export class SearchComponent {
     'Alaska',
     'Arizona',
     'Arkansas',
-    'California',
-    'Colorado',
-    'Connecticut',
-    'Delaware',
-    'Florida',
-    'Georgia',
-    'Hawaii',
-    'Idaho',
-    'Illinois',
-    'Indiana',
-    'Iowa',
-    'Kansas',
-    'Kentucky',
-    'Louisiana',
-    'Maine',
-    'Maryland',
-    'Massachusetts',
-    'Michigan',
-    'Minnesota',
-    'Mississippi',
-    'Missouri',
-    'Montana',
-    'Nebraska',
-    'Nevada',
-    'New Hampshire',
     'New Jersey',
     'New Mexico',
     'New York',
@@ -84,12 +59,22 @@ export class SearchComponent {
   ];
 
   private searchTerms = new Subject<string>();
+  checkedSearchOption: string;
 
   constructor(private http: Http, private searchService: SearchService) {
     this.queryCrtl = new FormControl();
     this.filteredQueries = this.queryCrtl.valueChanges
       .startWith(null).map(value => this.filterQueries(value));
+
   }
+
+  ngOnInit(): void {
+    this.queryCrtl.valueChanges
+      .debounceTime(400)
+      .distinctUntilChanged()
+      .subscribe(value => this.getReleasesSearchResults(value));
+  }
+
 
   search(term: string): void {
     this.searchTerms.next(term);
@@ -101,7 +86,7 @@ export class SearchComponent {
   }
 
   getReleasesSearchResults(query: string) {
-    this.searchService.search(query).subscribe(response => {
+    this.searchService.search(query, this.checkedSearchOption).subscribe(response => {
       this.searchResults = response;
     });
   }

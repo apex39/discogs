@@ -1,13 +1,18 @@
-<md-radio-group class="radio-group">
-  <div *ngFor="let searchOption of searchOptions; let first = first;">
-    <md-radio-button
-      value={{searchOption}} class="radio-button">{{searchOption}}
+<md-radio-group class="radio-group" [(ngModel)]="checkedSearchOption">
+  <div *ngFor="let searchOption of searchOptions; first as isFirst;">
+    <md-radio-button *ngIf="isFirst; else lol"
+       class="radio-button"  >{{searchOption}}
     </md-radio-button>
+    <ng-template #lol>
+      <md-radio-button
+        [value]=searchOption class="radio-button" >{{searchOption}}
+      </md-radio-button>
+    </ng-template>
   </div>
 </md-radio-group>
 
 <md-input-container>
-  <input mdInput [formControl]="queryCrtl" [mdAutocomplete]="auto" (keyup)="getReleasesSearchResults(queryCrtl.value)">
+  <input mdInput [formControl]="queryCrtl" [mdAutocomplete]="auto">
 </md-input-container>
 <md-autocomplete #auto="mdAutocomplete">
   <md-option *ngFor="let query of filteredQueries | async" [value]="query">
@@ -16,7 +21,8 @@
 </md-autocomplete>
 
 <ng-container *ngIf="searchResults">
-<div *ngFor="let result of searchResults.results; let i = index">
-  {{result.title}}
-</div>
+  <div *ngFor="let result of searchResults.results; let i = index">
+    {{result.title}}
+  </div>
 </ng-container>
+
