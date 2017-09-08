@@ -65,9 +65,12 @@ export class SearchComponent implements OnInit {
       searchOptionCtrl: new FormControl(),
       queryCtrl: new FormControl()
     });
-  // this.filteredQueries = this.searchFormGroup.queryCtrl.valueChanges
-  //   .startWith(null).map(value => this.filterQueries(value));
 
+    // first searchOption 'checked' by default
+    this.checkedSearchOption = this.searchOptions[0];
+
+    this.filteredQueries = this.searchFormGroup.controls.queryCtrl.valueChanges
+      .startWith(null).map(value => this.filterQueries(value));
   }
 
   ngOnInit(): void {
@@ -75,7 +78,6 @@ export class SearchComponent implements OnInit {
       .debounceTime(400)
       .distinctUntilChanged()
       .subscribe(value => {
-        console.log(value);
         this.getReleasesSearchResults(value.searchOptionCtrl, value.queryCtrl);
       });
   }
