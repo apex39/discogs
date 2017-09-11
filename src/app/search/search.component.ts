@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import {FormControl} from '@angular/forms';
-import {Observable} from 'rxjs/Observable';
+import { FormControl, FormGroup } from '@angular/forms';
+import { Observable } from 'rxjs/Observable';
 
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/startWith';
@@ -23,8 +23,7 @@ import {SearchResult} from './model/search-result';
 })
 
 export class SearchComponent implements OnInit {
-
-  queryCrtl: FormControl;
+  searchFormGroup: FormGroup;
   filteredQueries: Observable<string[]>;
   searchResults: SearchResult;
   states = ['Alabama',
@@ -62,17 +61,25 @@ export class SearchComponent implements OnInit {
   checkedSearchOption: string;
 
   constructor(private http: Http, private searchService: SearchService) {
-    this.queryCrtl = new FormControl();
-    this.filteredQueries = this.queryCrtl.valueChanges
-      .startWith(null).map(value => this.filterQueries(value));
+    this.searchFormGroup = new FormGroup({
+      searchOptionCtrl: new FormControl(),
+      queryCtrl: new FormControl()
+    });
 
+    // first searchOption 'checked' by default
+    this.checkedSearchOption = this.searchOptions[0];
+
+    this.filteredQueries = this.searchFormGroup.controls.queryCtrl.valueChanges
+      .startWith(null).map(value => this.filterQueries(value));
   }
 
   ngOnInit(): void {
-    this.queryCrtl.valueChanges
+    this.searchFormGroup.valueChanges
       .debounceTime(400)
       .distinctUntilChanged()
-      .subscribe(value => this.getReleasesSearchResults(value));
+      .subscribe(value => {
+        this.getReleasesSearchResults(value.searchOptionCtrl, value.queryCtrl);
+      });
   }
 
 
@@ -85,8 +92,8 @@ export class SearchComponent implements OnInit {
       : this.states;
   }
 
-  getReleasesSearchResults(query: string) {
-    this.searchService.search(query, this.checkedSearchOption).subscribe(response => {
+  getReleasesSearchResults(option: string, query: string) {
+    this.searchService.search(query, option).subscribe(response => {
       this.searchResults = response;
     });
   }

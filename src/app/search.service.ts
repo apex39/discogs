@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import {Http} from '@angular/http';
-import {Observable} from 'rxjs/Observable';
-import {SearchResult} from './search/model/search-result';
+import { Http } from '@angular/http';
+import { Observable } from 'rxjs/Observable';
+import { SearchResult } from './search/model/search-result';
 
 @Injectable()
 export class SearchService {
@@ -29,7 +29,6 @@ export class SearchService {
       }
     }
     const url = `${this.searchUrl}?${urlParameter}=${query}&key=${this.customerKey}&secret=${this.customerSecret}`;
-    console.log(url);
     return this.http.get(url).map(response => response.json()); // Http will be deprecated
   }
 
