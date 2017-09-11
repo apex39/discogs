@@ -77,9 +77,7 @@ export class SearchComponent implements OnInit {
     this.searchFormGroup.valueChanges
       .debounceTime(400)
       .distinctUntilChanged()
-      .subscribe(value => {
-        this.getReleasesSearchResults(value.searchOptionCtrl, value.queryCtrl);
-      });
+      .subscribe(value => this.getReleasesSearchResults(value.searchOptionCtrl, value.queryCtrl));
   }
 
 
@@ -93,8 +91,10 @@ export class SearchComponent implements OnInit {
   }
 
   getReleasesSearchResults(option: string, query: string) {
-    this.searchService.search(query, option).subscribe(response => {
-      this.searchResults = response;
-    });
+    if (option != null && query != null) {
+      this.searchService.search(query, option).subscribe(response => {
+        this.searchResults = response;
+      });
+    }
   }
 }
