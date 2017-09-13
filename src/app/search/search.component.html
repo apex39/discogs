@@ -1,24 +1,30 @@
-<form [formGroup]="searchFormGroup">
-  <md-radio-group class="radio-group" formControlName="searchOptionCtrl" [(ngModel)]="checkedSearchOption">
-    <div *ngFor="let searchOption of searchOptions">
-      <md-radio-button [value]=searchOption class="radio-button">
-        {{searchOption}}
-      </md-radio-button>
-    </div>
-    </md-radio-group>
+<div class="container">
+  <div class="row">
+    <div class="col-xs-6 col-xs-offset-3">
+      <form [formGroup]="searchFormGroup">
+        <md-radio-group class="radio-group" formControlName="searchOptionCtrl" [(ngModel)]="checkedSearchOption">
+          <div *ngFor="let searchOption of searchOptions">
+            <md-radio-button [value]=searchOption class="radio-button">
+              {{searchOption}}
+            </md-radio-button>
+          </div>
+        </md-radio-group>
 
-  <md-input-container>
-    <input mdInput formControlName="queryCtrl" [mdAutocomplete]="auto">
-  </md-input-container>
-  <md-autocomplete #auto="mdAutocomplete">
-    <md-option *ngFor="let query of filteredQueries | async" [value]="query">
-      {{query}}
-    </md-option>
-  </md-autocomplete>
+        <md-input-container>
+          <input mdInput formControlName="queryCtrl" [mdAutocomplete]="auto">
+        </md-input-container>
+        <md-autocomplete #auto="mdAutocomplete">
+          <md-option *ngFor="let query of filteredQueries | async" [value]="query">
+            {{query}}
+          </md-option>
+        </md-autocomplete>
 
-  <ng-container *ngIf="searchResults">
-    <div *ngFor="let result of searchResults.results; let i = index">
-      {{result.title +' ('+ result.id + ')'}}
+        <ng-container *ngIf="searchResults">
+          <div *ngFor="let result of searchResults.results; let i = index">
+            {{result.title +' ('+ result.id + ')'}}
+          </div>
+        </ng-container>
+      </form>
     </div>
-  </ng-container>
-</form>
+  </div>
+</div>
