@@ -13,21 +13,6 @@ export class SearchService {
 
   search(query: string, checkedSearchOption: string): Observable<SearchResult> {
     let urlParameter;
-
-    switch (checkedSearchOption) {
-      case 'Release': {
-        urlParameter = 'release_title';
-        break;
-      }
-      case 'Artist': {
-        urlParameter = 'artist';
-        break;
-      }
-      case 'Label': {
-        urlParameter = 'label';
-        break;
-      }
-    }
     const url = `${this.searchUrl}?${urlParameter}=${query}&key=${this.customerKey}&secret=${this.customerSecret}`;
     return this.http.get(url).map(response => response.json()); // Http will be deprecated
   }
