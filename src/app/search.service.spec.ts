@@ -16,18 +16,27 @@ describe('SearchService', () => {
     this.backend = this.injector.get(ConnectionBackend) as MockBackend;
     this.backend.connections.subscribe((connection: any) => this.lastConnection = connection);
 
-    this.searchOption = 'option';
     this.query = 'query'
+    this.correctSearchOptionKey = 'RELEASE';
   });
 
   it('search() should query current service url', () => {
     // GIVEN
     let expectedUrl = 'api.discogs.com/database/search'
     // WHEN
-    this.searchService.search(this.query, this.searchOption);
+    this.searchService.search(this.query, this.correctSearchOptionKey);
     // THEN
     expect(this.lastConnection).toBeDefined('no http service connection at all?');
     expect(this.lastConnection.request.url).toMatch(expectedUrl, 'url invalid');
+  });
+
+  it('search() should only accept the specified searchOption', () => {
+    //GIVEN
+    let faultyOptionKey: string = "BOOYAH"
+    //WHEN & THEN
+    expect(() => {
+      this.searchService.search(this.query, this.faultyOptionKey);
+    }).toThrowError("Given searchOption is not accepted.");
   });
 
   it('search() should return two empty objects as results', () => {
@@ -37,7 +46,7 @@ describe('SearchService', () => {
     let expectedResults: Object[] = [ {}, {} ];
 
     // WHEN
-    this.searchService.search(this.query, this.searchOption).subscribe(response => {
+    this.searchService.search(this.query, this.correctSearchOptionKey).subscribe(response => {
       actualResults = response.data;
     });
     this.lastConnection.mockRespond(new Response(new ResponseOptions({

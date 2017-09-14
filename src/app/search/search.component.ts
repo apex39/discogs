@@ -51,11 +51,6 @@ export class SearchComponent implements OnInit {
     'West Virginia',
     'Wisconsin',
     'Wyoming'];
-  searchOptions = [
-    'Release',
-    'Artist',
-    'Label'
-  ];
 
   private searchTerms = new Subject<string>();
   checkedSearchOption: string;
@@ -66,8 +61,8 @@ export class SearchComponent implements OnInit {
       queryCtrl: new FormControl()
     });
 
-    // first searchOption 'checked' by default
-    this.checkedSearchOption = this.searchOptions[0];
+    // RELEASE searchOption 'checked' by default
+    this.checkedSearchOption = SearchService.searchOptions.RELEASE.name;
 
     this.filteredQueries = this.searchFormGroup.controls.queryCtrl.valueChanges
       .startWith(null).map(value => this.filterQueries(value));
