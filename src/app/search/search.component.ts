@@ -54,7 +54,7 @@ export class SearchComponent implements OnInit {
     'Wyoming'];
 
   private searchTerms = new Subject<string>();
-  checkedSearchOption: SearchOption;
+  checkedSearchOption: string;
   searchOptions: SearchOption[];
   constructor(private http: Http, private searchService: SearchService) {
     this.searchFormGroup = new FormGroup({
@@ -64,7 +64,7 @@ export class SearchComponent implements OnInit {
 
     this.searchOptions = SearchService.searchOptions;
     // RELEASE searchOption 'checked' by default
-    this.checkedSearchOption = this.searchOptions.find(result => result.option === 'Release');
+    this.checkedSearchOption = this.searchOptions.find(result => result.option === 'Release').option;
 
     this.filteredQueries = this.searchFormGroup.controls.queryCtrl.valueChanges
       .startWith(null).map(value => this.filterQueries(value));
