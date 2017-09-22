@@ -4,8 +4,8 @@
       <form [formGroup]="searchFormGroup">
         <md-radio-group class="radio-group" formControlName="searchOptionCtrl" [(ngModel)]="checkedSearchOption">
           <div *ngFor="let searchOption of searchOptions">
-            <md-radio-button [value]=searchOption class="radio-button">
-              {{searchOption}}
+            <md-radio-button [value]=searchOption.option class="radio-button">
+              {{searchOption.option}}
             </md-radio-button>
           </div>
         </md-radio-group>
