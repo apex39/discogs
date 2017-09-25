@@ -21,8 +21,7 @@
 
         <ng-container *ngIf="searchResults">
           <ul class="panel-group" id="accordion">
-            <div *ngFor="let result of searchResults.results; let i = index">
-
+            <ng-container *ngFor="let result of searchResults.results; let i = index">
               <div class="panel panel-default">
                 <div class="panel-heading">
                   <h4 class="panel-title">
@@ -37,7 +36,7 @@
                   </div>
                 </div>
               </div>
-            </div>
+            </ng-container>
           </ul>
         </ng-container>
       </form>
