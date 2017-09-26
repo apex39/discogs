@@ -18,9 +18,9 @@
             {{query}}
           </md-option>
         </md-autocomplete>
-
+      </form>
         <ng-container *ngIf="searchResults">
-          <ul class="panel-group" id="accordion">
+          <div class="panel-group" id="accordion">
             <ng-container *ngFor="let result of searchResults.results; let i = index">
               <div class="panel panel-default">
                 <div class="panel-heading">
@@ -37,9 +37,8 @@
                 </div>
               </div>
             </ng-container>
-          </ul>
+          </div>
         </ng-container>
-      </form>
     </div>
   </div>
 </div>

@@ -1,3 +1,16 @@
-<p>
-  album-details works!
-</p>
+<div class="row">
+  <div class="col-md-4">
+    <img src="{{result.thumb}}">
+  </div>
+  <div class="col-md-6">
+    <div class="row">
+      <b>{{result.title}}</b>
+    </div>
+    <div class="row">
+      <i>{{result.label}} © {{result.year}}</i>
+    </div>
+    <div class="row">
+      {{result.genre}}
+    </div>
+  </div>
+</div>
