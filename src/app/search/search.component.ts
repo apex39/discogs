@@ -14,6 +14,7 @@ import 'rxjs/add/operator/map';
 import { Http } from '@angular/http';
 import { SearchService } from '../search.service';
 import { SearchResult } from './model/search-result';
+import {SearchOption} from './model/search-option';
 
 @Component({
   selector: 'app-search',
@@ -54,8 +55,10 @@ export class SearchComponent implements OnInit {
 
   private searchTerms = new Subject<string>();
   checkedSearchOption: string;
+  searchOptions: SearchOption[];
+  this.searchOptions = SearchService.searchOptions;
 
-  constructor(
+constructor(
     readonly http: Http,
     readonly searchService: SearchService,
     readonly builder: FormBuilder
@@ -65,8 +68,10 @@ export class SearchComponent implements OnInit {
   ngOnInit(): void {
     this.createForm();
     this.searchFormGroup.controls.queryCtrl.setValue("");
+
+
     // RELEASE searchOption 'checked' by default
-    this.checkedSearchOption = SearchService.searchOptions.RELEASE.name;
+    this.checkedSearchOption = this.searchOptions.find(result => result.option === 'Release').option;
 
     this.filteredQueries = this.searchFormGroup.controls.queryCtrl.valueChanges
     .startWith(null).map(value => this.filterQueries(value));

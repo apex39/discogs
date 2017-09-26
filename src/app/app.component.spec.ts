@@ -26,6 +26,10 @@ describe('AppComponent', () => {
     }).compileComponents();
   }));
 
+  beforeEach(() => {
+
+  })
+
   const appTitle = "Disoggs"
 
   it('should create the app', async(() => {
@@ -45,5 +49,12 @@ describe('AppComponent', () => {
     fixture.detectChanges();
     const compiled = fixture.debugElement.nativeElement;
     expect(compiled.querySelector('h1').textContent).toContain(appTitle);
+  }));
+
+  it('should render radioGroup with 3 options', async(() => {
+    const fixture = TestBed.createComponent(AppComponent);
+    fixture.detectChanges();
+    const compiled = fixture.debugElement.nativeElement;
+    expect(compiled.querySelector('md-radio-group').childElementCount).toContain(3);
   }));
 });
