@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Observable } from 'rxjs/Observable';
 
-import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/startWith';
 import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/debounceTime';
@@ -64,7 +63,6 @@ export class SearchComponent implements OnInit {
   ngOnInit(): void {
     this.createForm();
     this.searchFormGroup.controls.queryCtrl.setValue("");
-
 
     // RELEASE searchOption 'checked' by default
     this.checkedSearchOption = this.searchOptions.find(result => result.option === 'Release').option;
