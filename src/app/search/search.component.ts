@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Observable } from 'rxjs/Observable';
 
-import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/startWith';
 import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/debounceTime';
@@ -11,7 +10,6 @@ import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
-import { Http } from '@angular/http';
 import { SearchService } from '../search.service';
 import { SearchResult } from './model/search-result';
 import {SearchOption} from './model/search-option';
@@ -68,7 +66,6 @@ constructor(
   ngOnInit(): void {
     this.createForm();
     this.searchFormGroup.controls.queryCtrl.setValue("");
-
 
     // RELEASE searchOption 'checked' by default
     this.checkedSearchOption = this.searchOptions.find(result => result.option === 'Release').option;
