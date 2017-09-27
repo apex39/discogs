@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Observable } from 'rxjs/Observable';
 
-import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/startWith';
 import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/debounceTime';
@@ -11,9 +10,9 @@ import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
-import { Http } from '@angular/http';
 import { SearchService } from '../search.service';
 import { SearchResult } from './model/search-result';
+import {SearchOption} from './model/search-option';
 
 @Component({
   selector: 'app-search',
@@ -51,26 +50,23 @@ export class SearchComponent implements OnInit {
     'West Virginia',
     'Wisconsin',
     'Wyoming'];
-  searchOptions = [
-    'Release',
-    'Artist',
-    'Label'
-  ];
 
   private searchTerms = new Subject<string>();
   checkedSearchOption: string;
-
-  constructor(private http: Http, private searchService: SearchService) {
+  searchOptions: SearchOption[];
+  constructor(private searchService: SearchService) {
     this.searchFormGroup = new FormGroup({
       searchOptionCtrl: new FormControl(),
       queryCtrl: new FormControl()
     });
 
-    // first searchOption 'checked' by default
-    this.checkedSearchOption = this.searchOptions[0];
+    this.searchOptions = SearchService.searchOptions;
+    // RELEASE searchOption 'checked' by default
+    this.checkedSearchOption = this.searchOptions.find(result => result.option === 'Release').option;
 
     this.filteredQueries = this.searchFormGroup.controls.queryCtrl.valueChanges
       .startWith(null).map(value => this.filterQueries(value));
+
   }
 
   ngOnInit(): void {

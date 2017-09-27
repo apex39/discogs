@@ -4,8 +4,8 @@
       <form [formGroup]="searchFormGroup">
         <md-radio-group class="radio-group" formControlName="searchOptionCtrl" [(ngModel)]="checkedSearchOption">
           <div *ngFor="let searchOption of searchOptions">
-            <md-radio-button [value]=searchOption class="radio-button">
-              {{searchOption}}
+            <md-radio-button [value]=searchOption.option class="radio-button">
+              {{searchOption.option}}
             </md-radio-button>
           </div>
         </md-radio-group>
@@ -18,16 +18,27 @@
             {{query}}
           </md-option>
         </md-autocomplete>
-
-        <ng-container *ngIf="searchResults">
-          <ul class="list-group">
-            <div *ngFor="let result of searchResults.results; let i = index" class="list-group-item clearfix">
-              <b class="pull-left">{{result.title}}</b>
-              <a href="/" class="pull-right btn-sm">+</a>
-            </div>
-          </ul>
-        </ng-container>
       </form>
+        <ng-container *ngIf="searchResults">
+          <div class="panel-group" id="accordion">
+            <ng-container *ngFor="let result of searchResults.results; let i = index">
+              <div class="panel panel-default">
+                <div class="panel-heading">
+                  <h4 class="panel-title">
+                    <a data-toggle="collapse" data-parent="#accordion" href="#collapse{{i}}">
+                      {{result.title}}</a>
+                    <a href="/" class="pull-right">+</a>
+                  </h4>
+                </div>
+                <div id="collapse{{i}}" class="panel-collapse collapse">
+                  <div class="panel-body">
+                    <app-album-details [result]="result"></app-album-details>
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+          </div>
+        </ng-container>
     </div>
   </div>
 </div>
