@@ -11,7 +11,6 @@ import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
-import { Http } from '@angular/http';
 import { SearchService } from '../search.service';
 import { SearchResult } from './model/search-result';
 import {SearchOption} from './model/search-option';
@@ -56,13 +55,10 @@ export class SearchComponent implements OnInit {
   private searchTerms = new Subject<string>();
   checkedSearchOption: string;
   searchOptions: SearchOption[];
-  this.searchOptions = SearchService.searchOptions;
 
-constructor(
-    readonly http: Http,
+  constructor(
     readonly searchService: SearchService,
-    readonly builder: FormBuilder
-  ) {
+    readonly builder: FormBuilder) {
   }
 
   ngOnInit(): void {
@@ -86,7 +82,7 @@ constructor(
     this.searchFormGroup = this.builder.group({
       searchOptionCtrl: [ this.checkedSearchOption, Validators.nullValidator ],
       queryCtrl: [ this.searchTerms, Validators.nullValidator ]
-    })
+    });
   }
 
   search(term: string): void {
@@ -103,8 +99,7 @@ constructor(
       this.searchService.search(query, option).subscribe(response => {
         this.searchResults = response;
       });
-    }
-    else {
+    } else {
       this.searchResults = null;
     }
   }
