@@ -53,7 +53,7 @@ export class SearchComponent implements OnInit {
 
   private searchTerms = new Subject<string>();
   checkedSearchOption: string;
-  searchOptions: SearchOption[];
+  searchOptions = SearchService.searchOptions;
 
   constructor(
     readonly searchService: SearchService,
