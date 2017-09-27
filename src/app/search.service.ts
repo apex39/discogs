@@ -18,10 +18,9 @@ export class SearchService {
   constructor(private http: Http) {}
 
   search(query: string, checkedSearchOption: string): Observable<SearchResult> {
-    const searchOptionObj = SearchService.searchOptions.filter(result => result.option === checkedSearchOption);
+    const searchOptionObj: SearchOption = SearchService.searchOptions.filter(result => result.option === checkedSearchOption)[0];
     if (searchOptionObj) {
-      const url = `${SearchService.SEARCH_URL}?${checkedSearchOption['urlParameter']}=
-      ${query}&key=${this.customerKey}&secret=${this.customerSecret}`;
+      const url = `${SearchService.SEARCH_URL}?${searchOptionObj['urlParameter']}=${query}&key=${this.customerKey}&secret=${this.customerSecret}`;
       return this.http.get(url).map(response => response.json());
     }
     throw new Error('Given searchOption is not accepted.');
