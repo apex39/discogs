@@ -10,7 +10,7 @@ import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
-import { SearchService } from '../search.service';
+import { NetworkService } from '../network.service';
 import { SearchResult } from './model/search-result';
 import {SearchOption} from './model/search-option';
 
@@ -18,7 +18,7 @@ import {SearchOption} from './model/search-option';
   selector: 'app-search',
   templateUrl: './search.component.html',
   styleUrls: ['./search.component.css'],
-  providers: [SearchService]
+  providers: [NetworkService]
 })
 
 export class SearchComponent implements OnInit {
@@ -53,10 +53,10 @@ export class SearchComponent implements OnInit {
 
   private searchTerms = new Subject<string>();
   checkedSearchOption: string;
-  searchOptions = SearchService.searchOptions;
+  searchOptions = NetworkService.searchOptions;
 
   constructor(
-    readonly searchService: SearchService,
+    readonly searchService: NetworkService,
     readonly builder: FormBuilder) {
   }
 

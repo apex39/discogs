@@ -2,17 +2,17 @@ import { BaseRequestOptions, ConnectionBackend, Http, RequestOptions } from '@an
 import { MockBackend, MockConnection } from '@angular/http/testing';
 import { ReflectiveInjector } from '@angular/core'
 import { Response, ResponseOptions } from '@angular/http';
-import { SearchService } from './search.service';
+import { NetworkService } from './network.service';
 
-describe('SearchService', () => {
+describe('NetworkService', () => {
   beforeEach(() => {
     this.injector = ReflectiveInjector.resolveAndCreate([
       {provide: ConnectionBackend, useClass: MockBackend},
       {provide: RequestOptions, useClass: BaseRequestOptions},
       Http,
-      SearchService,
+      NetworkService,
     ]);
-    this.searchService = this.injector.get(SearchService);
+    this.searchService = this.injector.get(NetworkService);
     this.backend = this.injector.get(ConnectionBackend) as MockBackend;
     this.backend.connections.subscribe((connection: any) => this.lastConnection = connection);
 
