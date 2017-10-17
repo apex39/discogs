@@ -18,7 +18,7 @@ import { AlbumDetailsComponent } from './album-details/album-details.component';
   ],
   imports: [
     BrowserModule,
-    HttpModule,
+    HttpClientModule,
     BrowserAnimationsModule,
     MdRadioModule,
     MdInputModule,

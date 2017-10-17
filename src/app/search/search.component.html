@@ -27,7 +27,7 @@
                   <h4 class="panel-title">
                     <a data-toggle="collapse" data-parent="#accordion" href="#collapse{{i}}">
                       {{result.title}}</a>
-                    <a href="/" class="pull-right">+</a>
+                    <a (click)="addAlbum(result)" class="pull-right">+</a>
                   </h4>
                 </div>
                 <div id="collapse{{i}}" class="panel-collapse collapse">

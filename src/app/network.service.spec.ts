@@ -1,62 +1,45 @@
-import { BaseRequestOptions, ConnectionBackend, Http, RequestOptions } from '@angular/http';
-import { MockBackend, MockConnection } from '@angular/http/testing';
-import { ReflectiveInjector } from '@angular/core'
-import { Response, ResponseOptions } from '@angular/http';
-import { NetworkService } from './network.service';
+import { TestBed, inject } from '@angular/core/testing';
+import {
+  Response,
+  ResponseOptions,
+  XHRBackend
+} from '@angular/http';
+import { MockBackend } from '@angular/http/testing';
+import {Result} from './search/model/members/result';
+import {NetworkService} from './network.service';
+import {HttpClientTestingModule} from '@angular/common/http/testing';
+import {HttpHeaders} from '@angular/common/http';
 
 describe('NetworkService', () => {
+
   beforeEach(() => {
-    this.injector = ReflectiveInjector.resolveAndCreate([
-      {provide: ConnectionBackend, useClass: MockBackend},
-      {provide: RequestOptions, useClass: BaseRequestOptions},
-      Http,
-      NetworkService,
-    ]);
-    this.searchService = this.injector.get(NetworkService);
-    this.backend = this.injector.get(ConnectionBackend) as MockBackend;
-    this.backend.connections.subscribe((connection: any) => this.lastConnection = connection);
 
-    this.query = 'query'
-    this.correctSearchOptionKey = 'RELEASE';
-  });
-
-  it('search() should query current service url', () => {
-    // GIVEN
-    let expectedUrl = 'api.discogs.com/database/search'
-    // WHEN
-    this.searchService.search(this.query, this.correctSearchOptionKey);
-    // THEN
-    expect(this.lastConnection).toBeDefined('no http service connection at all?');
-    expect(this.lastConnection.request.url).toMatch(expectedUrl, 'url invalid');
-  });
-
-  it('search() should only accept the specified searchOption', () => {
-    //GIVEN
-    let faultyOptionKey: string = "BOOYAH"
-    //WHEN & THEN
-    expect(() => {
-      this.searchService.search(this.query, this.faultyOptionKey);
-    }).toThrowError("Given searchOption is not accepted.");
-  });
-
-  it('search() should return two empty objects as results', () => {
-    // GIVEN
-    jasmine.clock().install();
-    let actualResults: Object[];
-    let expectedResults: Object[] = [ {}, {} ];
-
-    // WHEN
-    this.searchService.search(this.query, this.correctSearchOptionKey).subscribe(response => {
-      actualResults = response.data;
+    TestBed.configureTestingModule({
+      imports: [HttpClientTestingModule],
+      providers: [
+        NetworkService,
+        { provide: XHRBackend, useClass: MockBackend },
+      ]
     });
-    this.lastConnection.mockRespond(new Response(new ResponseOptions({
-      body: JSON.stringify({data: expectedResults}),
-    })));
-    jasmine.clock().tick(1);
-    // THEN
-    expect(actualResults).toEqual(expectedResults, 'result should be the 2-element array of SearchResult\'s');
-    expect(actualResults.length).toEqual(2);
-    // AFTER
-    jasmine.clock().uninstall()
+  });
+
+  describe('addAlbum()', () => {
+
+    it('should return the same JSON as a sent one',
+      inject([NetworkService, XHRBackend], (networkService, mockBackend) => {
+
+        const mockRequest: Result = JSON.parse('{"style":[],"thumb":"https://img.discogs5.com/vXWZaCU3XRu3zhpUVp9QrzGn1nE=/fit-in/150x150/filters:strip_icc():format(jpeg):mode_rgb():quality(40)/discogs-images/R-7860649-1450362910-7756.jpeg.jpg","format":["Vinyl","7","45 RPM","Single"],"country":"UK","barcode":[],"uri":"/Christie-Alabama/release/7860649","community":{"want":1,"have":2},"label":["Epic"],"catno":"EPC 2044","year":"1974","genre":["Pop"],"title":"Christie - Alabama","resource_url":"https://api.discogs.com/releases/7860649","type":"release","id":7860649}');
+
+        mockBackend.connections.subscribe((connection) => {
+          connection.mockRespond(new Response(new ResponseOptions({
+            body: mockRequest
+          })));
+        });
+
+        networkService.addAlbum(mockRequest).subscribe((album) => {
+          expect(album).toBe(mockRequest);
+        });
+
+      }));
   });
 });
