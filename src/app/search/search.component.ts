@@ -84,7 +84,11 @@ export class SearchComponent implements OnInit {
   }
 
   addAlbum(album: Result) {
-    this.searchService.addAlbum(album).subscribe();
+    this.searchService.addAlbum(album).subscribe((response) => {
+      if (response.id === album.id) {
+        console.log('Album with id: ' + response.id + ' successfully added.');
+      }
+    });
   }
 
   filterQueries(value: string) {
