@@ -3,22 +3,22 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Observable } from 'rxjs/Observable';
 
 import 'rxjs/add/operator/startWith';
-import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
-import { SearchService } from '../search.service';
+import { Subject } from 'rxjs/Subject';
+import { NetworkService } from '../network.service';
 import { SearchResult } from './model/search-result';
-import {SearchOption} from './model/search-option';
+import {Result} from './model/members/result';
 
 @Component({
   selector: 'app-search',
   templateUrl: './search.component.html',
   styleUrls: ['./search.component.css'],
-  providers: [SearchService]
+  providers: [NetworkService]
 })
 
 export class SearchComponent implements OnInit {
@@ -53,16 +53,16 @@ export class SearchComponent implements OnInit {
 
   private searchTerms = new Subject<string>();
   checkedSearchOption: string;
-  searchOptions = SearchService.searchOptions;
+  searchOptions = NetworkService.searchOptions;
 
   constructor(
-    readonly searchService: SearchService,
+    readonly searchService: NetworkService,
     readonly builder: FormBuilder) {
   }
 
   ngOnInit(): void {
     this.createForm();
-    this.searchFormGroup.controls.queryCtrl.setValue("");
+    this.searchFormGroup.controls.queryCtrl.setValue('');
 
     // RELEASE searchOption 'checked' by default
     this.checkedSearchOption = this.searchOptions.find(result => result.option === 'Release').option;
@@ -83,8 +83,12 @@ export class SearchComponent implements OnInit {
     });
   }
 
-  search(term: string): void {
-    this.searchTerms.next(term);
+  addAlbum(album: Result) {
+    this.searchService.addAlbum(album).subscribe((response) => {
+      if (response.id === album.id) {
+        console.log('Album with id: ' + response.id + ' successfully added.');
+      }
+    });
   }
 
   filterQueries(value: string) {
